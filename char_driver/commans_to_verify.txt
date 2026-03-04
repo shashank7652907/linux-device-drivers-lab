@@ -1,0 +1,74 @@
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ sudo insmod char_driver.ko 
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ sudo dmesg
+[ 5128.738921] char_driver is laoded
+[ 5128.738941] char_driver Major No. : 236 , Minor N0. : 0
+[ 5128.738957] char_driver Fops is registered
+[ 5128.739383] char_driver Class is created 
+[ 5128.739931] char_driver Device is created
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ cat /sys/class/char/char0/dev
+236:0
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ ls -l /dev/char0
+crw------- 1 root root 236, 0 Mar  4 15:43 /dev/char0
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ gcc user.c 
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ sudo ./a.out
+Last byte from kernel to user is c
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ sudo dmesg
+[ 5128.738921] char_driver is laoded
+[ 5128.738941] char_driver Major No. : 236 , Minor N0. : 0
+[ 5128.738957] char_driver Fops is registered
+[ 5128.739383] char_driver Class is created 
+[ 5128.739931] char_driver Device is created
+[ 5158.938116] char_driver char copied from user is H
+[ 5158.938144] char_driver char copied from user is e
+[ 5158.938152] char_driver char copied from user is l
+[ 5158.938159] char_driver char copied from user is l
+[ 5158.938165] char_driver char copied from user is o
+[ 5158.938172] char_driver char copied from user is  
+[ 5158.938178] char_driver char copied from user is f
+[ 5158.938184] char_driver char copied from user is r
+[ 5158.938190] char_driver char copied from user is o
+[ 5158.938196] char_driver char copied from user is m
+[ 5158.938202] char_driver char copied from user is  
+[ 5158.938209] char_driver char copied from user is u
+[ 5158.938215] char_driver char copied from user is s
+[ 5158.938221] char_driver char copied from user is e
+[ 5158.938227] char_driver char copied from user is r
+[ 5158.938233] char_driver char copied from user is .
+[ 5158.938239] char_driver char copied from user is c
+[ 5158.938255] char_driver Last char copied is c
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ echo "" > commans_to_verify.txt
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ make clean
+make -C /lib/modules/6.12.47+rpt-rpi-v8/build M=/home/team2/batch2/SHASHANK/char_driver clean
+make[1]: Entering directory '/usr/src/linux-headers-6.12.47+rpt-rpi-v8'
+  CLEAN   /home/team2/batch2/SHASHANK/char_driver/Module.symvers
+make[1]: Leaving directory '/usr/src/linux-headers-6.12.47+rpt-rpi-v8'
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ sudo rmmod char_driver 
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ sudo dmesg
+[ 5128.738921] char_driver is laoded
+[ 5128.738941] char_driver Major No. : 236 , Minor N0. : 0
+[ 5128.738957] char_driver Fops is registered
+[ 5128.739383] char_driver Class is created 
+[ 5128.739931] char_driver Device is created
+[ 5158.938116] char_driver char copied from user is H
+[ 5158.938144] char_driver char copied from user is e
+[ 5158.938152] char_driver char copied from user is l
+[ 5158.938159] char_driver char copied from user is l
+[ 5158.938165] char_driver char copied from user is o
+[ 5158.938172] char_driver char copied from user is  
+[ 5158.938178] char_driver char copied from user is f
+[ 5158.938184] char_driver char copied from user is r
+[ 5158.938190] char_driver char copied from user is o
+[ 5158.938196] char_driver char copied from user is m
+[ 5158.938202] char_driver char copied from user is  
+[ 5158.938209] char_driver char copied from user is u
+[ 5158.938215] char_driver char copied from user is s
+[ 5158.938221] char_driver char copied from user is e
+[ 5158.938227] char_driver char copied from user is r
+[ 5158.938233] char_driver char copied from user is .
+[ 5158.938239] char_driver char copied from user is c
+[ 5158.938255] char_driver Last char copied is c
+[ 5250.368289] char_driver Device is destroyed
+[ 5250.368314] char_driver Class is destroyed
+[ 5250.368319] char_driver Fops is unregistered
+[ 5250.368322] char_driver is unlaoded
+team2@raspberrypi:~/batch2/SHASHANK/char_driver $ 
