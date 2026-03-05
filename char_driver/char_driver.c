@@ -1,7 +1,5 @@
 #include <linux/module.h>
 #include <linux/fs.h>
-#include <linux/cdev.h>
-#include <linux/device.h>
 #include <linux/errno.h>
 #include <linux/uaccess.h>
 #include <linux/cdev.h>
@@ -27,9 +25,7 @@ static int char_module_release(struct inode* i, struct file* f){
 
 static ssize_t char_module_read(struct file* f, char __user *buff, size_t len, loff_t* offset){
     int ret;
-    if(*offset > 0){
-        return 0;
-    }
+    if (len == 0 || *offset > 0) return 0;
     ret = copy_to_user(buff, &t, 1);
     if(ret != 0){
         pr_info(DEVICE_NAME " copy_to_user failed\n");
@@ -70,13 +66,18 @@ static int __init char_module_init(void){
     int ret;
     ret = alloc_chrdev_region(&dev, 0, 1, DEVICE_NAME);
     if(ret != 0){
-        printk(KERN_INFO DEVICE_NAME "Alloc failed\n");
+        printk(KERN_INFO DEVICE_NAME " Alloc failed\n");
         return ret;
     }
     pr_info(DEVICE_NAME " is laoded\n");
     pr_info(DEVICE_NAME " Major No. : %d , Minor N0. : %d\n",MAJOR(dev), MINOR(dev));
     cdev_init(&c_dev, &char_file_ops);
-    cdev_add(&c_dev, dev, 1);
+    ret = cdev_add(&c_dev, dev, 1);
+    if(ret < 0){
+        pr_info(DEVICE_NAME " Cdev add failed");
+        unregister_chrdev_region(dev, 1);
+        return ret;
+    }
     pr_info(DEVICE_NAME " Fops is registered\n");
 
     cl = class_create(CLASS_NAME);
@@ -122,13 +123,15 @@ static void __exit char_module_exit(void){
     pr_info(DEVICE_NAME " is unlaoded\n");
 }
 
-module_init(char_module_init);
-module_exit(char_module_exit);
-
 MODULE_LICENSE("GPL");
 
 MODULE_AUTHOR("Adepu Shashank");
 MODULE_DESCRIPTION("Character driver on my own");
+
+module_init(char_module_init);
+module_exit(char_module_exit);
+
+
 
 
 
